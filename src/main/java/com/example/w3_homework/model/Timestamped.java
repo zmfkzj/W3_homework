@@ -1,6 +1,5 @@
-package com.example.w3_homework.entity;
+package com.example.w3_homework.model;
 
-import lombok.Data;
 import org.springframework.data.annotation.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 

@@ -1,12 +1,14 @@
 package com.example.w3_homework.controller;
 
-import com.example.w3_homework.dto.PassDto;
 import com.example.w3_homework.dto.PostDto;
-import com.example.w3_homework.entity.Post;
+import com.example.w3_homework.dto.PostContentDto;
+import com.example.w3_homework.model.Post;
+import com.example.w3_homework.model.User;
 import com.example.w3_homework.repository.PostRepository;
+import com.example.w3_homework.security.UserDetailsImpl;
 import com.example.w3_homework.service.PostService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,8 +26,10 @@ public class PostController {
     }
 
     @PostMapping
-    public Post uploadPost(@RequestBody PostDto postDto){
-        Post post = new Post(postDto);
+    public Post uploadPost(@RequestBody PostContentDto postContentDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        System.out.println("asdf");
+        User user = userDetails.getUser();
+        Post post = new Post(postContentDto, user);
         return postRepository.save(post);
     }
 
@@ -34,14 +38,9 @@ public class PostController {
         return postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("찾는 게시물이 없습니다."));
     }
 
-    @PostMapping("/{id}")
-    public boolean checkPass(@PathVariable Long id, @RequestBody PassDto passDto){
-        return postService.checkPass(id, passDto.getPassword());
-    }
-
     @PutMapping("/{id}")
-    public Long modifyPost(@PathVariable Long id, @RequestBody PostDto postDto){
-        return postService.update(id, postDto);
+    public Long modifyPost(@PathVariable Long id, @RequestBody PostContentDto postContentDto){
+        return postService.update(id, postContentDto);
     }
 
     @DeleteMapping("/{id}")

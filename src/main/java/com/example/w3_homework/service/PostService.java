@@ -1,7 +1,7 @@
 package com.example.w3_homework.service;
 
-import com.example.w3_homework.dto.PostDto;
-import com.example.w3_homework.entity.Post;
+import com.example.w3_homework.dto.PostContentDto;
+import com.example.w3_homework.model.Post;
 import com.example.w3_homework.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,15 +15,9 @@ public class PostService {
     }
 
     @Transactional
-    public Long update(Long id, PostDto postDto){
+    public Long update(Long id, PostContentDto postContentDto){
         Post post1 = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 아이디가 존재하지 않습니다."));
-        post1.update(postDto);
+        post1.update(postContentDto);
         return post1.getId();
-    }
-
-    public boolean checkPass(Long id, String inputPass){
-        Post post1 = postRepository.findById(id).orElseThrow(()->new IllegalArgumentException("해당 아이디가 존재하지 않습니다."));
-        String savedPass = post1.getPassword();
-        return savedPass.equals(inputPass);
     }
 }
